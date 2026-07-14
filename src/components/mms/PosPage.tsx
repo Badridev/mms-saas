@@ -425,15 +425,15 @@ function ReceiptModal({ ticket, onClose }: { ticket: Ticket; onClose: () => void
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <tbody>
                 {ticket.items.map((i) => (
-                  <>
-                    <tr key={i.id + "-n"}>
+                  <Fragment key={i.id}>
+                    <tr>
                       <td style={{ padding: "2px 0" }} colSpan={2}>{i.name}</td>
                     </tr>
-                    <tr key={i.id + "-l"}>
+                    <tr>
                       <td style={{ paddingLeft: 8 }}>{i.qty} x {formatNum(i.price)}</td>
                       <td style={{ textAlign: "right" }}>{formatNum(i.qty * i.price)}</td>
                     </tr>
-                  </>
+                  </Fragment>
                 ))}
               </tbody>
             </table>
