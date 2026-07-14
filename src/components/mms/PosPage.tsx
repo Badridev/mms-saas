@@ -425,17 +425,16 @@ function ReceiptModal({ ticket, onClose }: { ticket: Ticket; onClose: () => void
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <tbody>
                 {ticket.items.map((i) => (
-                  <tr key={i.id}>
-                    <td style={{ padding: "2px 0" }} colSpan={3}>{i.name}</td>
-                  </tr>
-                )).flatMap((row, idx) => [
-                  row,
-                  <tr key={ticket.items[idx].id + "-l"}>
-                    <td style={{ paddingLeft: 8 }}>{ticket.items[idx].qty} x {formatNum(ticket.items[idx].price)}</td>
-                    <td></td>
-                    <td className="amt" style={{ textAlign: "right" }}>{formatNum(ticket.items[idx].qty * ticket.items[idx].price)}</td>
-                  </tr>,
-                ])}
+                  <>
+                    <tr key={i.id + "-n"}>
+                      <td style={{ padding: "2px 0" }} colSpan={2}>{i.name}</td>
+                    </tr>
+                    <tr key={i.id + "-l"}>
+                      <td style={{ paddingLeft: 8 }}>{i.qty} x {formatNum(i.price)}</td>
+                      <td style={{ textAlign: "right" }}>{formatNum(i.qty * i.price)}</td>
+                    </tr>
+                  </>
+                ))}
               </tbody>
             </table>
             <div className="sep" style={{ borderTop: "1px dashed #000", margin: "6px 0" }} />
