@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { Sidebar } from "@/components/mms/Sidebar";
 import { VoiceWave } from "@/components/mms/VoiceWave";
+import { AIChatInterface } from "@/components/mms/ai/AIChatInterface";
 import {
   AiBubble, UserBubble, TypingBubble, AnalysisCard, InvoiceCard,
   type AnalysisStep, type InvoiceResult,
@@ -125,6 +126,7 @@ export function ChatWorkspace() {
           ref={scrollRef}
           className="flex-1 overflow-y-auto scrollbar-thin px-6 md:px-10 pb-6"
         >
+          <AIChatInterface />
           {empty ? (
             <div className="max-w-4xl mx-auto mt-2">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">

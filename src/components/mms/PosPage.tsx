@@ -6,6 +6,7 @@ import {
   Copy, FileText, Layers, Image as ImageIcon, Scissors, Stamp, Palette,
 } from "lucide-react";
 import { Sidebar } from "@/components/mms/Sidebar";
+import { formatFCFA } from "@/lib/utils";
 
 // ---------------- Types & catalogue ----------------
 type Category = "Impression" | "Copie" | "Reliure" | "Finition" | "Numérique";
@@ -430,8 +431,8 @@ function ReceiptModal({ ticket, onClose }: { ticket: Ticket; onClose: () => void
                       <td style={{ padding: "2px 0" }} colSpan={2}>{i.name}</td>
                     </tr>
                     <tr>
-                      <td style={{ paddingLeft: 8 }}>{i.qty} x {formatNum(i.price)}</td>
-                      <td style={{ textAlign: "right" }}>{formatNum(i.qty * i.price)}</td>
+                      <td style={{ paddingLeft: 8 }}>{i.qty} x {formatFCFA(i.price)}</td>
+                      <td style={{ textAlign: "right" }}>{formatFCFA(i.qty * i.price)}</td>
                     </tr>
                   </Fragment>
                 ))}
@@ -439,18 +440,18 @@ function ReceiptModal({ ticket, onClose }: { ticket: Ticket; onClose: () => void
             </table>
             <div className="sep" style={{ borderTop: "1px dashed #000", margin: "6px 0" }} />
             <div className="row" style={{ display: "flex", justifyContent: "space-between" }}>
-              <span>Sous-total</span><span>{formatNum(ticket.subTotal)}</span>
+              <span>Sous-total</span><span>{formatFCFA(ticket.subTotal)}</span>
             </div>
             {ticket.discount > 0 && (
               <div className="row" style={{ display: "flex", justifyContent: "space-between" }}>
-                <span>Remise</span><span>-{formatNum(ticket.discount)}</span>
+                <span>Remise</span><span>-{formatFCFA(ticket.discount)}</span>
               </div>
             )}
             <div
               className="row total"
               style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: 14, marginTop: 4 }}
             >
-              <span>TOTAL FCFA</span><span>{formatNum(ticket.total)}</span>
+              <span>TOTAL FCFA</span><span>{formatFCFA(ticket.total)}</span>
             </div>
             <div className="row" style={{ display: "flex", justifyContent: "space-between", marginTop: 4 }}>
               <span>Paiement</span><span>{ticket.payment}</span>
@@ -486,12 +487,4 @@ function ReceiptModal({ ticket, onClose }: { ticket: Ticket; onClose: () => void
       </motion.div>
     </motion.div>
   );
-}
-
-// ---------------- Utils ----------------
-function formatNum(n: number) {
-  return n.toLocaleString("fr-FR");
-}
-function formatFCFA(n: number) {
-  return formatNum(n) + " FCFA";
 }
