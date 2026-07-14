@@ -143,8 +143,20 @@
     border-color: var(--color-border);
   }
 
+  html, body {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
   }
 }
+
+@utility scrollbar-thin {
+  &::-webkit-scrollbar { width: 6px; height: 6px; }
+  &::-webkit-scrollbar-thumb { background: color-mix(in oklab, var(--color-foreground) 15%, transparent); border-radius: 999px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+}
+
