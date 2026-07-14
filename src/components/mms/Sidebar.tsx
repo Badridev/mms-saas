@@ -3,24 +3,24 @@ import {
   Home, Bot, Wallet, FileText, Users, Wrench,
   ShoppingCart, Truck, Receipt, TrendingUp, Settings, Sparkles,
 } from "lucide-react";
-import { useState } from "react";
+import { Link, useRouterState } from "@tanstack/react-router";
 
 const items = [
-  { icon: Home, label: "Dashboard", key: "dashboard" },
-  { icon: Bot, label: "Assistant IA", key: "ai" },
-  { icon: Wallet, label: "Ventes", key: "ventes" },
-  { icon: FileText, label: "Devis", key: "devis" },
-  { icon: Users, label: "Clients", key: "clients" },
-  { icon: Wrench, label: "Services", key: "services" },
-  { icon: ShoppingCart, label: "Achats", key: "achats" },
-  { icon: Truck, label: "Fournisseurs", key: "fournisseurs" },
-  { icon: Receipt, label: "Dépenses", key: "depenses" },
-  { icon: TrendingUp, label: "Rapports", key: "rapports" },
-  { icon: Settings, label: "Paramètres", key: "params" },
-];
+  { icon: Home, label: "Dashboard", to: "/" },
+  { icon: Bot, label: "Assistant IA", to: "/" },
+  { icon: Wallet, label: "Ventes (POS)", to: "/ventes" },
+  { icon: FileText, label: "Devis", to: "/devis" },
+  { icon: Users, label: "Clients", to: "/clients" },
+  { icon: Wrench, label: "Services", to: "/services" },
+  { icon: ShoppingCart, label: "Achats", to: "/achats" },
+  { icon: Truck, label: "Fournisseurs", to: "/fournisseurs" },
+  { icon: Receipt, label: "Dépenses", to: "/depenses" },
+  { icon: TrendingUp, label: "Rapports", to: "/rapports" },
+  { icon: Settings, label: "Paramètres", to: "/parametres" },
+] as const;
 
 export function Sidebar() {
-  const [active, setActive] = useState("ai");
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
   return (
     <aside className="hidden md:flex w-64 shrink-0 flex-col bg-sidebar text-sidebar-foreground p-4 gap-2 border-r border-sidebar-border">
       <div className="flex items-center gap-2 px-2 py-4">
@@ -34,24 +34,25 @@ export function Sidebar() {
       </div>
 
       <nav className="flex-1 flex flex-col gap-1 mt-2">
-        {items.map((it) => {
-          const isActive = active === it.key;
+        {items.map((it, idx) => {
+          const isActive = pathname === it.to && !(it.to === "/" && idx === 0 && pathname === "/");
+          const active = it.to === "/ventes" ? pathname.startsWith("/ventes") : pathname === it.to && idx !== 0 ? true : isActive;
           return (
-            <button
-              key={it.key}
-              onClick={() => setActive(it.key)}
+            <Link
+              key={`${it.label}-${idx}`}
+              to={it.to}
               className="relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-sidebar-foreground/75 hover:text-white transition-colors"
             >
-              {isActive && (
+              {active && (
                 <motion.div
                   layoutId="sidebar-active"
                   className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary to-primary-glow shadow-lg shadow-primary/40"
                   transition={{ type: "spring", stiffness: 380, damping: 32 }}
                 />
               )}
-              <it.icon className={`relative h-[18px] w-[18px] ${isActive ? "text-white" : ""}`} />
-              <span className={`relative ${isActive ? "text-white" : ""}`}>{it.label}</span>
-            </button>
+              <it.icon className={`relative h-[18px] w-[18px] ${active ? "text-white" : ""}`} />
+              <span className={`relative ${active ? "text-white" : ""}`}>{it.label}</span>
+            </Link>
           );
         })}
       </nav>
