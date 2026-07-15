@@ -18,7 +18,7 @@ const items: Item[] = [
   { icon: Users, label: "Clients", to: "/clients" },
   { icon: FileText, label: "Devis", soon: true },
   { icon: Wrench, label: "Services", soon: true },
-  { icon: ShoppingCart, label: "Achats", soon: true },
+  { icon: ShoppingCart, label: "Achats", to: "/achats" },
   { icon: Truck, label: "Fournisseurs", soon: true },
   { icon: Receipt, label: "Dépenses", soon: true },
   { icon: TrendingUp, label: "Rapports", soon: true },
