@@ -14,9 +14,10 @@ export const searchERP = async (query: string): Promise<SearchResult[]> => {
   console.log(`Executing read-only search query: SELECT for "${query}"`);
   
   // Return mocked results
-  return [
+  const results: SearchResult[] = [
     { id: '1', type: 'client', name: 'Bamba Diop', details: 'Client régulier' },
     { id: '2', type: 'product', name: 'Service Maintenance', details: 'Maintenance informatique' },
     { id: '3', type: 'invoice', name: 'Facture INV-001', details: 'Montant: 50 000 FCFA' },
-  ].filter(item => item.name.toLowerCase().includes(query.toLowerCase()));
+  ];
+  return results.filter(item => item.name.toLowerCase().includes(query.toLowerCase()));
 };
