@@ -1,26 +1,33 @@
 import { motion } from "framer-motion";
 import {
-  Home, Bot, Wallet, FileText, Users, Wrench,
+  Home, Wallet, FileText, Users, Wrench,
   ShoppingCart, Truck, Receipt, TrendingUp, Settings, Sparkles,
 } from "lucide-react";
 import { Link, useRouterState } from "@tanstack/react-router";
 
-const items = [
-  { icon: Home, label: "Dashboard", to: "/" },
-  { icon: Bot, label: "Assistant IA", to: "/" },
+type Item = {
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  to?: string;
+  soon?: boolean;
+};
+
+const items: Item[] = [
+  { icon: Home, label: "Assistant IA", to: "/" },
   { icon: Wallet, label: "Ventes (POS)", to: "/ventes" },
-  { icon: FileText, label: "Devis", to: "/devis" },
   { icon: Users, label: "Clients", to: "/clients" },
-  { icon: Wrench, label: "Services", to: "/services" },
-  { icon: ShoppingCart, label: "Achats", to: "/achats" },
-  { icon: Truck, label: "Fournisseurs", to: "/fournisseurs" },
-  { icon: Receipt, label: "Dépenses", to: "/depenses" },
-  { icon: TrendingUp, label: "Rapports", to: "/rapports" },
-  { icon: Settings, label: "Paramètres", to: "/parametres" },
-] as const;
+  { icon: FileText, label: "Devis", soon: true },
+  { icon: Wrench, label: "Services", soon: true },
+  { icon: ShoppingCart, label: "Achats", soon: true },
+  { icon: Truck, label: "Fournisseurs", soon: true },
+  { icon: Receipt, label: "Dépenses", soon: true },
+  { icon: TrendingUp, label: "Rapports", soon: true },
+  { icon: Settings, label: "Paramètres", soon: true },
+];
 
 export function Sidebar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+
   return (
     <aside className="hidden md:flex w-64 shrink-0 flex-col bg-sidebar text-sidebar-foreground p-4 gap-2 border-r border-sidebar-border">
       <div className="flex items-center gap-2 px-2 py-4">
@@ -34,15 +41,12 @@ export function Sidebar() {
       </div>
 
       <nav className="flex-1 flex flex-col gap-1 mt-2">
-        {items.map((it, idx) => {
-          const isActive = pathname === it.to && !(it.to === "/" && idx === 0 && pathname === "/");
-          const active = it.to === "/ventes" ? pathname.startsWith("/ventes") : pathname === it.to && idx !== 0 ? true : isActive;
-          return (
-            <Link
-              key={`${it.label}-${idx}`}
-              to={it.to}
-              className="relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-sidebar-foreground/75 hover:text-white transition-colors"
-            >
+        {items.map((it) => {
+          const active = !!it.to && (it.to === "/" ? pathname === "/" : pathname.startsWith(it.to));
+          const baseClass =
+            "relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors";
+          const content = (
+            <>
               {active && (
                 <motion.div
                   layoutId="sidebar-active"
@@ -51,7 +55,34 @@ export function Sidebar() {
                 />
               )}
               <it.icon className={`relative h-[18px] w-[18px] ${active ? "text-white" : ""}`} />
-              <span className={`relative ${active ? "text-white" : ""}`}>{it.label}</span>
+              <span className={`relative flex-1 ${active ? "text-white" : ""}`}>{it.label}</span>
+              {it.soon && (
+                <span className="relative text-[9px] uppercase tracking-wide bg-sidebar-accent/70 px-1.5 py-0.5 rounded">
+                  Bientôt
+                </span>
+              )}
+            </>
+          );
+
+          if (it.soon || !it.to) {
+            return (
+              <div
+                key={it.label}
+                title="Bientôt disponible"
+                className={`${baseClass} text-sidebar-foreground/40 cursor-not-allowed`}
+              >
+                {content}
+              </div>
+            );
+          }
+
+          return (
+            <Link
+              key={it.label}
+              to={it.to}
+              className={`${baseClass} text-sidebar-foreground/75 hover:text-white`}
+            >
+              {content}
             </Link>
           );
         })}
